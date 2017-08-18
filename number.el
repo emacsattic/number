@@ -147,10 +147,11 @@
 (defun number-transform (f)
   "Transform the number at point in some way."
   (let ((point (point)))
-    (let* ((beg-end (progn (unless (region-active-p)
+    (let* ((beg-end (prog2 (unless (region-active-p)
                              (number/mark))
                            (list (region-beginning)
-                                 (region-end))))
+                                 (region-end))
+                           (deactivate-mark)))
            (string (apply 'buffer-substring-no-properties beg-end)))
       (let ((new (number-format (funcall f (number-read string)))))
         (apply 'delete-region beg-end)
@@ -176,8 +177,10 @@
                            (number-get number :decimal-padding)
                            (number-get number :number))))
     (integral
-     (format (format "%%0.%dd" (number-get number :padding))
-             (number-get number :number)))))
+     (if (= 0 (number-get number :number))
+         "0"
+       (format (format "%%0.%dd" (number-get number :padding))
+               (number-get number :number))))))
 
 (defun number-pad-decimal (left-pad right-pad n)
   "Pad a decimal on the left- and right-hand side of the decimal
