@@ -126,12 +126,12 @@
 (defun number/mark ()
   "Mark the number at point."
   (interactive)
-  (when (looking-back "[0-9.]+")
-    (skip-chars-backward "[0-9.]+"))
+  (skip-chars-backward "0-9.")
   (when (looking-back "[+\\-]")
-    (skip-chars-backward "[+\\-]"))
+    (goto-char (1- (point))))
   (let ((point (point)))
-    (skip-chars-forward "[+\\-]?[0-9.]+")
+    (skip-chars-forward "+-")
+    (skip-chars-forward "0-9.")
     (set-mark (point))
     (goto-char point)))
 
