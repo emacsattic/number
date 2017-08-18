@@ -133,7 +133,8 @@
     (skip-chars-forward "+-")
     (skip-chars-forward "0-9")
     (when (looking-at "\\.[0-9]")
-      (skip-chars-forward ".0-9"))
+      (skip-chars-forward ".")
+      (skip-chars-forward "0-9"))
     (set-mark (point))
     (goto-char point)))
 
